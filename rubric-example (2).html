@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title> — </title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:hsl(213 45% 9%);--card:hsl(220 47% 7%);--fg:hsl(210 40% 93%);--fg-muted:hsl(214 20% 62%);
+  --primary:hsl(178 82% 33%);--primary-fg:hsl(178 90% 95%);--secondary:hsl(215 30% 14%);
+  --muted:hsl(215 25% 16%);--border:hsl(215 20% 16%);--glass:rgba(255,255,255,0.04);
+  --glass-b:rgba(255,255,255,0.07);--success:hsl(152 60% 34%);--success-fg:hsl(152 60% 90%);
+  --danger:hsl(0 68% 48%);--danger-fg:hsl(0 0% 98%);
+  --type-visual:hsl(217 80% 58%);--type-inapp:hsl(25 90% 52%);--type-prog:hsl(263 65% 52%);
+  --font:'Plus Jakarta Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;--r:8px;
+}
+html{font-size:15px}
+body{font-family:var(--font);background:linear-gradient(160deg,hsl(210 55% 6%) 0%,hsl(208 48% 10%) 100%);min-height:100vh;color:var(--fg);padding:20px 16px 40px}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--muted);border-radius:999px}
+.mode-banner{display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px;width:fit-content}
+.mode-banner.grading{background:rgba(20,200,160,.1);color:var(--primary);border:1px solid rgba(20,200,160,.2)}
+.mode-banner.reference{background:rgba(250,170,60,.1);color:hsl(38 95% 60%);border:1px solid rgba(250,170,60,.2)}
+.mode-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+.mode-banner.reference .mode-dot{animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.task-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.task-header h1{font-size:1rem;font-weight:800;line-height:1.3}
+.task-meta{font-size:.75rem;color:var(--fg-muted);margin-top:3px}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{padding:3px 10px;border-radius:999px;font-size:.68rem;font-weight:600;background:var(--secondary);color:var(--fg-muted)}
+.section-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin-bottom:6px}
+.glass{background:var(--glass);border:1px solid var(--glass-b);border-radius:var(--r);padding:14px 16px;font-size:.82rem;color:rgba(210,222,240,.88);line-height:1.65}
+.overview-box{background:rgba(20,200,160,.06);border:1px solid rgba(20,200,160,.15);border-radius:var(--r);padding:14px 16px;font-size:.82rem;color:rgba(210,222,240,.88);line-height:1.65;margin-bottom:14px}
+.gallery{display:flex;gap:10px;margin:14px 0;max-height:500px}
+.gallery-main{flex:1;border-radius:var(--r);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3)}
+.gallery-thumbs{width:110px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.gallery-thumb{border-radius:6px;overflow:hidden;position:relative;min-height:80px}
+.gallery img{display:block}
+.gallery-main img{max-width:100%;max-height:480px;object-fit:contain}.gallery-thumb img{width:100%;height:100%;object-fit:cover}
+.gallery-main video{max-width:100%;max-height:480px}
+.gallery-main:hover img,.gallery-thumb:hover img{transform:scale(1.02);transition:transform .45s ease}
+.img-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(6,12,22,.92) 0%,transparent 100%);padding:18px 10px 8px;font-size:.75rem;font-weight:500}
+.gallery-thumb .img-label{font-size:.68rem;padding:12px 8px 6px}
+.layout{display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start;margin-top:16px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.side-panel{position:static!important}}
+.main-panel{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 6px 36px rgba(0,0,0,.4)}
+.side-panel{position:sticky;top:20px;background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 36px rgba(0,0,0,.4)}
+.rubric-header{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px}
+.rubric-header h2{font-size:.9rem;font-weight:700}
+.rubric-header span{font-size:.7rem;color:var(--fg-muted)}
+.rubric-list{display:flex;flex-direction:column;gap:8px}
+.rubric-item{display:flex;align-items:flex-start;gap:10px;background:var(--glass);border:1px solid var(--glass-b);border-radius:var(--r);padding:10px 12px;transition:border-color .2s}
+.rubric-item.is-pass{border-color:rgba(34,197,94,.28);background:rgba(34,197,94,.04)}
+.rubric-item.is-fail{border-color:rgba(239,68,68,.28);background:rgba(239,68,68,.04)}
+.score-bubble{min-width:46px;height:40px;border-radius:999px;background:linear-gradient(160deg,var(--primary) 0%,hsl(178 82% 24%) 100%);display:flex;align-items:center;justify-content:center;color:var(--primary-fg);font-weight:700;font-size:.9rem;font-family:var(--mono);flex-shrink:0}
+.rubric-body{flex:1;min-width:0}
+.rubric-title{font-size:.8rem;font-weight:600;line-height:1.35}
+.rubric-id{font-size:.67rem;color:var(--fg-muted);margin-left:5px;font-weight:400}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.chip{padding:2px 8px;border-radius:999px;font-size:.65rem;font-weight:600;color:#fff}
+.chip-tag{background:var(--glass);color:var(--fg-muted);border:1px solid var(--glass-b)}
+.chip-visual{background:var(--type-visual)}.chip-inapp{background:var(--type-inapp)}.chip-prog{background:var(--type-prog)}
+.toggle-btn{background:none;border:none;color:var(--fg-muted);font-size:.7rem;cursor:pointer;display:flex;align-items:center;gap:4px;margin-top:7px;padding:0;font-family:var(--font);transition:color .15s}
+.toggle-btn:hover{color:var(--fg)}.toggle-btn svg{width:11px;height:11px}
+.detail-panel{display:none;margin-top:7px;padding:9px 11px;border-radius:6px;border:1px dashed var(--border);font-size:.7rem;color:var(--fg-muted);line-height:1.55}
+.detail-panel.open{display:block}.detail-panel>p+p{margin-top:5px}.detail-panel strong{color:var(--fg)}
+.comment-box{margin-top:7px;width:100%;background:rgba(255,255,255,.035);border:1px solid var(--glass-b);border-radius:6px;color:var(--fg);font-size:.72rem;font-family:var(--font);padding:6px 10px;resize:none;min-height:34px;outline:none;transition:border-color .15s}
+.comment-box::placeholder{color:var(--fg-muted);opacity:.7}.comment-box:focus{border-color:rgba(255,255,255,.14)}.comment-box:disabled{opacity:.5;cursor:not-allowed}
+.rubric-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:6px;font-size:.7rem;font-weight:600;font-family:var(--font);cursor:pointer;border:1px solid transparent;transition:all .15s;height:30px;white-space:nowrap}
+.btn svg{width:11px;height:11px;flex-shrink:0}.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-ghost{background:transparent;border-color:var(--glass-b);color:var(--fg-muted)}.btn-ghost:not(:disabled):hover{background:var(--glass);color:var(--fg)}
+.btn-pass{background:var(--success);color:var(--success-fg);border-color:var(--success)}.btn-pass:not(:disabled):hover{background:hsl(152 60% 27%)}
+.btn-fail{background:var(--danger);color:var(--danger-fg);border-color:var(--danger)}.btn-fail:not(:disabled):hover{background:hsl(0 68% 40%)}
+.btn-primary{background:var(--primary);color:var(--primary-fg);border-color:var(--primary)}.btn-primary:not(:disabled):hover{background:hsl(178 82% 26%)}
+.btn-outline{background:transparent;border-color:var(--primary);color:var(--primary)}.btn-outline:not(:disabled):hover{background:rgba(20,200,160,.08)}
+.score-summary{margin-bottom:16px;padding:14px;background:var(--glass);border:1px solid var(--glass-b);border-radius:var(--r)}
+.score-row{display:flex;justify-content:space-between;align-items:center}
+.score-label{font-size:.72rem;color:var(--fg-muted)}.score-value{font-size:1.4rem;font-weight:800;font-family:var(--mono);color:var(--primary)}
+.score-breakdown{margin-top:10px;display:flex;gap:8px}
+.score-stat{flex:1;text-align:center;background:var(--secondary);border-radius:6px;padding:7px 4px}
+.score-stat-val{font-size:1rem;font-weight:800;font-family:var(--mono)}.score-stat-val.pass{color:hsl(152 60% 60%)}.score-stat-val.fail{color:hsl(0 68% 62%)}.score-stat-val.pend{color:var(--fg-muted)}
+.score-stat-lbl{font-size:.62rem;color:var(--fg-muted);margin-top:1px;text-transform:uppercase;letter-spacing:.05em}
+.progress-bar{margin-top:10px;height:4px;background:var(--secondary);border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),hsl(178 82% 50%));border-radius:999px;transition:width .35s ease}
+.side-actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}.side-actions .btn{width:100%;justify-content:center}
+.export-section{margin-top:16px}.export-section h4{font-size:.78rem;font-weight:700;margin-bottom:7px}
+.export-pre{max-height:160px;overflow:auto;padding:10px 12px;border-radius:var(--r);background:hsl(220 50% 5%);font-size:.65rem;font-family:var(--mono);color:var(--primary-fg);line-height:1.55;white-space:pre;border:1px solid var(--border)}
+.ref-note{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;background:rgba(250,170,60,.08);border:1px solid rgba(250,170,60,.2);font-size:.72rem;color:hsl(38 90% 65%);margin-bottom:14px}
+.ref-note svg{width:13px;height:13px;flex-shrink:0}
+.mt-3{margin-top:12px}.tip{font-size:.68rem;color:var(--fg-muted);margin-top:10px;line-height:1.5}
+.file-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:14px 0}
+.file-grid-item{aspect-ratio:1;border-radius:var(--r);overflow:hidden;position:relative;cursor:pointer;background:rgba(0,0,0,.3);border:1px solid var(--glass-b);transition:border-color .2s,transform .2s}
+.file-grid-item:hover{border-color:var(--primary);transform:scale(1.03)}
+.file-grid-media{width:100%;height:100%;object-fit:cover;display:block}
+.file-grid-audio{display:flex;align-items:center;justify-content:center;background:var(--secondary)}
+.file-grid-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(6,12,22,.92) 0%,transparent 100%);padding:16px 8px 6px;font-size:.7rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.lightbox.open{display:flex}
+.lightbox-content{position:relative;max-width:90vw;max-height:90vh}
+.lightbox-media{max-width:90vw;max-height:85vh;object-fit:contain;border-radius:var(--r)}
+.lightbox-close{position:absolute;top:-12px;right:-12px;width:32px;height:32px;border-radius:50%;background:var(--secondary);border:1px solid var(--border);color:var(--fg);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1}
+.lightbox-close:hover{background:var(--danger);color:var(--danger-fg)}
+.lightbox-label{text-align:center;margin-top:8px;font-size:.8rem;color:var(--fg-muted)}
+footer{margin-top:14px;font-size:.68rem;color:var(--fg-muted)}
+</style>
+</head>
+<body>
+<div class="mode-banner grading">
+  <span class="mode-dot"></span>
+  Active Grading View
+</div>
+<div class="layout">
+  <section class="main-panel">
+    <div class="task-header">
+      <div>
+        <h1></h1>
+        <p class="task-meta">Pod:  · Est: 0 hrs</p>
+      </div>
+      <div class="badges"></div>
+    </div>
+    
+    <div class="section-label">Manager brief</div>
+    <div class="glass"></div>
+    
+    
+    
+    <div class="rubric-header">
+      <h2>Criteria (0)</h2>
+      <span>Total: 0 pts</span>
+    </div>
+    <div class="rubric-list"></div>
+    <footer>Task ID:  · Anonymized for assessment examples.</footer>
+  </section>
+  <aside class="side-panel">
+    <div class="score-summary">
+      <div class="score-row">
+        <span class="score-label">Score</span>
+        <span class="score-value" id="score-val">0 / 0</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="score-breakdown">
+        <div class="score-stat"><div class="score-stat-val pass" id="stat-pass">0</div><div class="score-stat-lbl">Passed</div></div>
+        <div class="score-stat"><div class="score-stat-val fail" id="stat-fail">0</div><div class="score-stat-lbl">Failed</div></div>
+        <div class="score-stat"><div class="score-stat-val pend" id="stat-pend">0</div><div class="score-stat-lbl">Pending</div></div>
+      </div>
+    </div>
+    <div class="side-actions">
+            <button class="btn btn-primary" onclick="exportJson()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export graded JSON</button>
+            <button class="btn btn-outline" onclick="clearGrades()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Clear all grades</button>
+          </div>
+          <div class="export-section"><h4>Graded output</h4><pre class="export-pre" id="export-pre"></pre></div>
+          <p class="tip">Grade each criterion, then export results as JSON.</p>
+  </aside>
+</div>
+<script>
+const IS_REF=false;
+const CRITERIA=[];
+const TOTAL_PTS=0;
+const grades={};
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function calcScore(){let ep=0,pa=0,fa=0,pe=0;CRITERIA.forEach(c=>{const g=grades[c.id];if(!g||g.result===null)pe++;else if(g.result==='pass'){pa++;ep+=c.score}else fa++;});return{ep,pa,fa,pe}}
+function updateUI(){const s=calcScore();document.getElementById('score-val').textContent=s.ep+' / '+TOTAL_PTS;document.getElementById('prog-fill').style.width=(TOTAL_PTS?Math.round(s.ep/TOTAL_PTS*100):0)+'%';document.getElementById('stat-pass').textContent=s.pa;document.getElementById('stat-fail').textContent=s.fa;document.getElementById('stat-pend').textContent=s.pe;const pre=document.getElementById('export-pre');if(pre)pre.textContent=JSON.stringify(buildOut(),null,2)}
+function buildOut(){return{task_id:'',graded:CRITERIA.map(c=>({id:c.id,text:c.text,score:c.score,type:c.type,tags:c.tags,result:grades[c.id]?.result??null,comment:grades[c.id]?.comment??''}))}}
+function setGrade(id,result){if(IS_REF)return;const prev=grades[id]||{result:null,comment:''};grades[id]={result:result==='null'?null:result,comment:prev.comment};const item=document.getElementById('item-'+id);const g=grades[id];const isPass=g.result==='pass';const isFail=g.result==='fail';item.className=isPass?'rubric-item is-pass':isFail?'rubric-item is-fail':'rubric-item';const actions=item.querySelector('.rubric-actions');actions.innerHTML=(isPass?'<button class="btn btn-pass" onclick="setGrade(\''+id+'\',\'null\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Passed</button>':'<button class="btn btn-ghost" onclick="setGrade(\''+id+'\',\'pass\')">Pass</button>')+(isFail?'<button class="btn btn-fail" onclick="setGrade(\''+id+'\',\'null\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Failed</button>':'<button class="btn btn-ghost" onclick="setGrade(\''+id+'\',\'fail\')">Fail</button>');updateUI()}
+function setComment(id,val){if(IS_REF)return;const prev=grades[id]||{result:null,comment:''};grades[id]={result:prev.result,comment:val};updateUI()}
+function clearGrades(){if(IS_REF)return;CRITERIA.forEach(c=>{grades[c.id]={result:null,comment:''}});document.querySelectorAll('.rubric-item').forEach(el=>{el.className='rubric-item';const id=el.id.replace('item-','');const actions=el.querySelector('.rubric-actions');if(actions)actions.innerHTML='<button class="btn btn-ghost" onclick="setGrade(\''+id+'\',\'pass\')">Pass</button><button class="btn btn-ghost" onclick="setGrade(\''+id+'\',\'fail\')">Fail</button>';const ta=el.querySelector('.comment-box');if(ta)ta.value=''});updateUI()}
+function toggleDetail(id){const p=document.getElementById('det-'+id);const c=document.getElementById('chev-'+id);const l=document.getElementById('dlab-'+id);const o=p.classList.toggle('open');l.textContent=o?'Hide details':'Show details';c.innerHTML=o?'<polyline points="18 15 12 9 6 15"/>':'<polyline points="6 9 12 15 18 9"/>'}
+function openLightbox(id){document.getElementById('lb-'+id).classList.add('open');document.body.style.overflow='hidden'}
+function closeLightbox(id){document.getElementById('lb-'+id).classList.remove('open');document.body.style.overflow=''}
+function exportJson(){const b=new Blob([JSON.stringify(buildOut(),null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='-graded.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u)}
+updateUI();
+</script>
+</body>
+</html>
